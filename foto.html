@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foto Interaktif</title>
+    <!-- Tailwind CSS CDN untuk styling yang cepat dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fce7f3; /* Latar belakang pink muda */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            color: #4b5563; /* Warna teks abu-abu gelap */
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.5rem; /* Sudut membulat */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden; /* Memastikan bayangan dan sudut tetap terlihat */
+        }
+        .photo-frame {
+            border: 6px solid #f06292; /* Bingkai pink terang */
+            border-radius: 1rem; /* Sudut membulat pada bingkai */
+            overflow: hidden;
+            display: inline-block; /* Agar bingkai menyesuaikan ukuran gambar */
+            cursor: pointer; /* Menunjukkan bahwa gambar bisa diklik */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Bayangan awal */
+        }
+        .photo-frame:hover {
+            transform: translateY(-5px); /* Efek melayang saat hover */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Bayangan lebih dalam saat hover */
+        }
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Menghilangkan ruang kosong di bawah gambar */
+            border-radius: 0.5rem; /* Sudut membulat pada gambar */
+        }
+        .message-box {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            background-color: #fce7f3; /* Latar belakang pink sangat muda */
+            color: #db2777; /* Warna teks pink gelap */
+            border-radius: 0.75rem; /* Sudut membulat */
+            font-size: 1.25rem;
+            font-weight: 600;
+            opacity: 0; /* Awalnya tidak terlihat */
+            transform: translateY(20px); /* Awalnya sedikit ke bawah */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Transisi halus */
+            min-height: 3rem; /* Memastikan kotak pesan memiliki tinggi minimal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .message-box.show {
+            opacity: 1; /* Tampilkan */
+            transform: translateY(0); /* Kembali ke posisi semula */
+        }
+        .title-text {
+            font-size: 2.25rem; /* Ukuran font lebih besar */
+            font-weight: 700; /* Tebal */
+            color: #ec4899; /* Pink yang lebih cerah */
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title-text">Coba Klik Foto Ini!</h1>
+        <div class="photo-frame" id="photoFrame">
+            <!-- Gunakan placeholder image dari placehold.co -->
+            <img src="https://placehold.co/400x300/a78bfa/ffffff?text=Senyum!" alt="Foto Tersenyum" class="main-image">
+        </div>
+        <div class="message-box" id="messageBox">
+            <!-- Pesan akan muncul di sini setelah diklik -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const photoFrame = document.getElementById('photoFrame');
+            const messageBox = document.getElementById('messageBox');
+            
+            // Definisikan pesan yang akan muncul saat foto diklik
+            const clickMessage = "Wah, senyummu indah sekali!";
+
+            // Tambahkan event listener untuk klik pada bingkai foto
+            photoFrame.addEventListener('click', () => {
+                // Setel teks pesan
+                messageBox.textContent = clickMessage;
+                // Tambahkan kelas 'show' untuk menampilkan pesan dengan transisi
+                messageBox.classList.add('show');
+
+                // Opsional: Sembunyikan pesan setelah beberapa detik
+                setTimeout(() => {
+                    messageBox.classList.remove('show');
+                    // Bersihkan teks setelah transisi selesai untuk memastikan tidak ada teks kosong yang terlihat
+                    setTimeout(() => {
+                        messageBox.textContent = ""; 
+                    }, 500); // Sesuaikan dengan durasi transisi opacity
+                }, 3000); // Pesan akan hilang setelah 3 detik
+            });
+        });
+    </script>
+</body>
+</html>

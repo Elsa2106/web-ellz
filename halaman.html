@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Charmonman (like Monotype Corsiva) and Playfair Display (for Roman texture) -->
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS untuk font dan animasi */
+        .font-charmonman {
+            font-family: 'Charmonman', cursive;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Animasi teks berjalan */
+        .running-text-container {
+            overflow: hidden; /* Penting untuk menyembunyikan bagian teks yang keluar */
+            white-space: nowrap; /* Mencegah teks melompat ke baris baru */
+            box-sizing: border-box; /* Memastikan padding dan border disertakan dalam lebar/tinggi elemen */
+            position: relative;
+            width: 100%;
+            height: 2.5rem; /* Tinggi container */
+            transition: all 0.3s ease-in-out; /* Transisi untuk perubahan hover */
+        }
+
+        .running-text {
+            display: inline-block; /* Agar bisa dianimasikan bergerak secara horizontal */
+            animation: marquee 20s linear infinite; /* Animasi bergerak 20 detik, linear, berulang tak terbatas */
+            padding-left: 100%; /* Memulai teks dari luar kanan */
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); } /* Posisi awal teks */
+            100% { transform: translateX(-100%); } /* Bergerak ke kiri sampai teks habis */
+        }
+
+        /* Untuk memastikan teks terus menerus terlihat tanpa jeda saat looping */
+        .running-text::after {
+            content: " — Selamat datang di halaman profil saya! Semoga hari Anda menyenangkan! — "; /* Duplikasi teks agar efek kontinu */
+            padding-left: 2em; /* Spasi antar duplikasi teks */
+        }
+
+        /* Container untuk foto yang dapat digulir secara vertikal */
+        .scrollable-photos-container {
+            overflow-y: auto; /* Memungkinkan pengguliran vertikal */
+            -webkit-overflow-scrolling: touch; /* Meningkatkan pengguliran pada perangkat sentuh */
+            width: 100%;
+            height: 320px; /* Tinggi tetap untuk container yang bisa digulir */
+            border: 1px solid #fce7f3; /* Border ringan pink */
+            border-radius: 0.75rem; /* Sudut membulat */
+            padding: 0.5rem; /* Padding internal */
+            background-color: #fff0f5; /* Latar belakang pink yang lebih terang */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Bayangan halus */
+        }
+
+        /* Wrapper untuk foto agar tersusun dalam grid yang fleksibel */
+        .scrollable-photos-wrapper {
+            display: flex; /* Mengatur item foto secara horizontal */
+            flex-wrap: wrap; /* Memungkinkan foto untuk membungkus ke baris baru */
+            justify-content: center; /* Memusatkan foto di baris */
+            gap: 1rem; /* Jarak antar foto */
+            padding-bottom: 0.5rem; /* Padding bawah untuk memastikan scrollbar tidak menutupi item terakhir */
+        }
+
+        .scrollable-photo-item {
+            width: 120px; /* Lebar setiap foto - ukuran persegi kecil sedang */
+            height: 120px; /* Tinggi setiap foto - ukuran persegi kecil sedang */
+            border-radius: 0.75rem; /* Sudut membulat untuk foto */
+            object-fit: cover; /* Pastikan gambar mengisi area tanpa terdistorsi */
+            flex-shrink: 0; /* Mencegah foto menyusut */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan sedikit lebih jelas */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transisi untuk zoom hover */
+        }
+
+        /* Hover effect for photo items */
+        .scrollable-photo-item:hover {
+            transform: scale(1.1); /* Lebih membesar saat di-hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Bayangan lebih kuat saat di-hover */
+        }
+
+        /* Custom scrollbar styles (untuk vertikal) */
+        .scrollable-photos-container::-webkit-scrollbar {
+            width: 8px; /* Lebar scrollbar */
+        }
+
+        .scrollable-photos-container::-webkit-scrollbar-track {
+            background: #fce7f3; /* Warna track scrollbar pink terang */
+            border-radius: 10px;
+        }
+
+        .scrollable-photos-container::-webkit-scrollbar-thumb {
+            background: #f06292; /* Warna thumb scrollbar pink */
+            border-radius: 10px;
+        }
+
+        .scrollable-photos-container::-webkit-scrollbar-thumb:hover {
+            background: #db2777; /* Warna thumb scrollbar pink lebih gelap saat hover */
+        }
+
+        /* Animasi muncul untuk kotak profil utama */
+        .profile-content {
+            /* Tidak perlu opacity: 0 dan transform: translateY(20px) secara default di sini, karena langsung terlihat */
+        }
+
+        .profile-content.fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+            /* Pastikan properti awal fade-in sesuai dengan tampilan langsung */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Efek hover untuk tautan media sosial */
+        .social-link {
+            display: inline-flex; /* Agar transisi bayangan bekerja dengan baik */
+            align-items: center;
+            padding: 0.5rem 1rem; /* Tambahkan padding agar area hover lebih besar */
+            border-radius: 9999px; /* Bentuk pil */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Bayangan awal yang lembut */
+            transition: all 0.3s ease-in-out; /* Transisi untuk semua perubahan */
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px); /* Sedikit naik saat di-hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Bayangan lebih kuat */
+        }
+
+        /* Gaya untuk Playlist Saya */
+        .playlist-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #fce7f3;
+            border-radius: 0.75rem;
+            background-color: #fff0f5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            text-align: left; /* Teks judul playlist di kiri */
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap; /* Responsive wrapping */
+        }
+
+        .playlist-header h2 {
+            margin-bottom: 0; /* Remove default margin */
+        }
+
+        .spotify-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #1DB954; /* Spotify Green */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.875rem; /* Smaller font size */
+        }
+        .spotify-button:hover {
+            background-color: #1ED760; /* Lighter Spotify Green */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Untuk menempatkan info di kiri, kontrol di kanan */
+            gap: 1rem; /* Jarak antar elemen dalam playlist item */
+            margin-bottom: 1rem;
+            background-color: #fff;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap; /* Untuk responsivitas pada layar kecil */
+        }
+
+        .playlist-item-info {
+            flex-grow: 1; /* Biarkan info mengisi ruang yang tersisa */
+            flex-basis: 150px; /* Beri basis agar tidak terlalu menyempit */
+        }
+
+        .playlist-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: #db2777; /* Warna pink gelap untuk judul lagu */
+            margin-bottom: 0.25rem;
+        }
+
+        .playlist-item p {
+            font-family: 'Playfair Display', serif;
+            color: #6b7280; /* Warna abu-abu untuk artis */
+            font-size: 0.875rem; /* Ukuran teks lebih kecil */
+        }
+
+        /* Kontrol untuk lirik yang dikelompokkan */
+        .lyrics-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* Gaya untuk tautan lirik (tombol) */
+        .lyrics-link {
+            display: inline-flex; /* Penting untuk padding dan background */
+            align-items: center;
+            padding: 0.5rem 1rem; /* Menambahkan padding agar terlihat seperti tombol */
+            background-color: #7b1fa2; /* Ungu gelap */
+            color: white;
+            border-radius: 9999px; /* Bentuk pil */
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.875rem; /* Ukuran font yang konsisten dengan spotify button */
+        }
+        .lyrics-link:hover {
+            background-color: #5d0f86; /* Ungu lebih gelap saat hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gaya untuk teks Lihat Lirik yang kosong (hanya sebagai area klik transparan) */
+        .lyrics-text-link {
+            color: #7b1fa2; /* Ungu gelap */
+            cursor: pointer;
+            text-decoration: none; /* Hapus underline default */
+            font-weight: bold;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+            white-space: nowrap; /* Pastikan teks tidak melompat */
+            font-size: 0.8rem; /* Perkecil ukuran font "Lihat Lirik" */
+            padding: 0.2rem 0.5rem; /* Padding kecil untuk area klik */
+            border: 1px solid transparent; /* Border transparan */
+            border-radius: 9999px; /* Bentuk pil */
+            /* Mengosongkan konten agar tidak ada teks "Lihat Lirik" */
+            content: ''; 
+        }
+        .lyrics-text-link:hover {
+            color: #5d0f86; /* Ungu lebih gelap saat hover */
+            text-decoration: underline; /* Tambahkan underline saat hover */
+            border-color: #d8b4fe; /* Border ringan saat hover */
+            background-color: #f3e8ff; /* Latar belakang sangat muda saat hover */
+        }
+
+
+        /* Gaya untuk biodata */
+        .biodata-container {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #fce7f3;
+            border-radius: 0.75rem;
+            background-color: #fff0f5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            text-align: left;
+        }
+        .biodata-container p {
+            font-family: 'Playfair Display', serif;
+            color: #4a5568; /* Warna teks abu-abu tua */
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        .biodata-container p strong {
+            color: #db2777; /* Warna pink gelap untuk label */
+        }
+
+        /* Gaya untuk Promosi Saya */
+        .promotion-container {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #fce7f3;
+            border-radius: 0.75rem;
+            background-color: #fff0f5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        .promotion-container h2 {
+            font-family: 'Charmonman', cursive;
+            font-weight: bold;
+            color: #c026d3; /* Nuansa ungu-pink */
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .promotion-container p {
+            font-family: 'Playfair Display', serif;
+            color: #4a5568;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .promo-button { /* General style for all promo buttons */
+            display: inline-block;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0.5rem; /* Tambahkan margin antar tombol */
+        }
+        .promo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gaya khusus untuk tombol Lihat Promosi */
+        .promo-button-promosi {
+            background-color: #f06292; /* Pink terang */
+        }
+        .promo-button-promosi:hover {
+            background-color: #db2777; /* Pink lebih gelap */
+        }
+
+        /* Gaya khusus untuk tombol Lihat Memories - Diubah menjadi pink */
+        .promo-button-memories {
+            background-color: #ef476f; /* Pink yang vibrant */
+            color: white;
+        }
+        .promo-button-memories:hover {
+            background-color: #d92d53; /* Pink lebih gelap saat hover */
+        }
+
+
+        /* Gaya untuk tombol Lihat Memories di bawah Memories */
+        .memories-button-container {
+            text-align: center;
+            margin-top: 1.5rem; /* Jarak dari galeri di atasnya */
+            margin-bottom: 1.5rem; /* Jarak ke konten di bawahnya */
+        }
+
+        /* Gaya Modal untuk Lirik (Tidak digunakan lagi karena beralih ke halaman terpisah) */
+        .modal-overlay {
+            display: none; /* Sembunyikan modal karena sekarang menggunakan halaman terpisah */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-profile-content" class="bg-white p-8 rounded-xl shadow-2xl max-w-2xl w-full text-center">
+        <!-- Judul Profil -->
+        <h1 class="text-3xl font-bold font-charmonman text-pink-700 mb-4" style="font-size: 16px;">
+            My web 'ell
+        </h1>
+
+        <!-- Gambar Profil (Placeholder) -->
+        <!-- Anda bisa mengganti URL gambar ini dengan gambar Anda sendiri -->
+        <img src="https://i.pinimg.com/736x/a4/2d/d5/a42dd5c03b85d36edf734875cef6c744.jpg"
+             alt="Gambar Profil"
+             class="w-36 h-36 rounded-full mx-auto mb-6 object-cover border-4 border-pink-300 shadow-md transform transition-transform duration-300 hover:scale-105">
+
+        <!-- Isi Teks Profil (Dipindahkan ke atas Biodata Saya) -->
+        <p class="text-gray-800 font-playfair leading-relaxed mb-6">
+            Selamat datang di halaman profil sederhana ini. Saya senang Anda bisa berkunjung ke sini!
+            Di sini Anda akan menemukan informasi dasar dan beberapa hal menarik.
+            Semoga konten yang disajikan dapat memberikan gambaran singkat tentang saya.
+            Terima kasih atas perhatian Anda.
+        </p>
+
+        <!-- Bagian Biodata -->
+        <div class="biodata-container">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Biodata Saya</h2>
+            <p><strong>Nama:</strong> Elsa J.A Panjaitan</p>
+            <p><strong>Usia:</b> 16 Tahun</p>
+            <p><strong>Sekolah:</strong> SMK TELKOM 1 MEDAN</p>
+            <p><strong>Hobi:</strong> Menulis, Mendengarkan Musik, dan Fotografi</p>
+            <p><strong>Tgl lahir:</strong> 21/06/2009</p>
+        </div>
+
+        <!-- Bagian untuk foto yang dapat digulir (Memories) -->
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-4">My photo</h2>
+        <div class="scrollable-photos-container">
+            <div class="scrollable-photos-wrapper">
+                <!-- Foto-foto yang dapat digulir -->
+                <img src="https://i.pinimg.com/736x/f2/1f/44/f21f443755a022330990a9224c3f9675.jpg" alt="Foto 1" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/cd/6c/4f/cd6c4f914c39aea56d9a9e72aafe6d25.jpg" alt="Foto 2" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/75/2a/be/752abee866625cb079fb6d24aa889f9b.jpg" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/e6/22/96/e62296a2a4488f1392b24bf11e0d265d.jpg" alt="Foto 4" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/17/34/01/173401331fbd68471f1bf5b03b262efc.jpg" alt="Foto 5" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/31/05/ff/3105ffd69f05a0be4def3a91fa42d545.jpg" alt="Foto 6" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/72/b1/ce/72b1ce47ddfd624d87d0f5d10e179d17.jpg" class="scrollable-photo-item">
+                <img src="https://i.pinimg.com/736x/b5/55/83/b55583844b9eb2d941a58451e4e4f1f6.jpg" alt="Foto 8" class="scrollable-photo-item">
+            </div>
+        </div>
+
+        <!-- Tombol "Lihat Memories" di bawah Memories -->
+        <div class="memories-button-container">
+            <a href="memories-page.html" class="promo-button promo-button-memories">Lihat Memories e</a>
+        </div>
+
+
+        <!-- Bagian untuk Playlist Saya -->
+        <div class="playlist-container">
+            <div class="playlist-header">
+                <h2 class="text-xl font-semibold text-gray-700">Playlist Saya</h2>
+                <a href="https://open.spotify.com/playlist/38hfozAZnPDQD7MJXmrZvk?si=RCZmQub0SiCKOZdxXVQv3g" target="_blank" class="spotify-button">
+                    <!-- Spotify Icon (simple SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="mr-1">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.248 17.58c-.147.243-.46.326-.703.179-2.09-.762-4.14-.98-6.687-.665-.306.038-.597-.16-.677-.466-.078-.306.12-.598.426-.677 2.766-.356 5.093-.11 7.424.774.243.147.327.46.18.705zm-1.071-2.903c-.198.327-.616.435-.943.238-2.316-1.421-5.758-1.74-7.147-.923-.374.212-.51-.274-.298-.648.18-.316.596-.423.97-.212 1.498-.853 5.319-.536 7.971 1.05.327.198.435.616.238.943zm-1.066-2.905c-.259.429-.79.57-1.22.312-2.839-1.72-7.01-2.07-8.316-1.22-.43.26-.57.79-.312 1.22.259.429.79.57 1.22.312 1.096-.665 4.881-.302 7.643 1.396.429.259.57.79.312 1.22z"/>
+                    </svg>
+                    Buka Spotify
+                </a>
+            </div>
+            
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Diva">Diva</h3>
+                    <p data-song-artist="Beyoncé">Beyoncé</p>
+                </div>
+                <!-- Grup lirik -->
+                <div class="lyrics-controls">
+                    <!-- Tombol "Lihat Lirik" yang mengarah ke lirik.html -->
+                    <a href="lirik.html?title=Diva&artist=Beyoncé&lyrics=I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20di-%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%20(first)%0AStop%20the%20track%2C%20let%20me%20state%20facts%0AI%20told%20you%20gimme%20a%20minute%2C%20and%20I'll%20be%20right%20back%20(first)%0A50%20million%20round%20the%20world%2C%20and%20they%20say%20that%20I%20couldn't%20get%20it%0AI%20done%20got%20so%20sick%20and%20filthy%20with%20Benji's%2C%20I%20can't%20spend%20it%20(first)%0AHow%20you%20gon'%20be%20talking%20shit%3F%0AYou%20act%20like%20I%20just%20got%20up%20in%20it%0ABeen%20the%20number%20one%20diva%20in%20this%20game%20for%20a%20minute%20(first)%0AI%20know%20you%20read%20the%20paper%2C%20the%20one%20that%20they%20call%20a%20queen%0AEvery%20radio%20'round%20the%20world%20know%20me%20'cause%20that's%20where%20I%20be%20(first)%0AI'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20di-%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%20(first)%0AWhen%20he%20pull%20up%20(up)%2C%20wanna%20pop%20my%20hood%20up%20(up)%0ABet%20he%20better%20have%20a%20six-pack%20in%20the%20cooler%20(first)%0AGetting%20money%20(money)%2C%20divas%20gettin'%20money%20(money)%0AIf%20you%20ain't%20gettin'%20money%2C%20then%20you%20ain't%20got%20nothing%20for%20me%20(first)%0ATell%20me%20somethin'%20(tell%20me%20somethin')%0AWhere%20yo'%20boss%20at%3F%20(Where%20yo'%20boss%20at%3F)%0AWhere%20my%20ladies%20up%20in%20here%20that%20like%20to%20talk%20back%3F%20(That%20like%20to%20talk%20back)%0AI%20wanna%20see%20ya%20(I%20can%20see%20her)%0AI'd%20like%20to%20meet%20ya%20(I%20d%20like%20to%20meet%20her)%0AWhat%20you%20say%3F%20(Not%20to%20me)%0AShe%20ain't%20no%20diva%20(she%20ain't%20no%20diva)%20(first)%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0ASince%2015%20in%20my%20stilettos%2C%20been%20strutting%20in%20this%20game%20(game)%0A%22What's%20your%20age%3F%22%20was%20the%20question%20they%20asked%20when%20I%20hit%20the%20stage%20(stage)%0AI'm%20a%20diva%2C%20best%20believe-a%2C%20you%20see%20her%2C%20she%20gettin'%20paid%20(paid)%0AShe%20ain't%20calling%20him%20to%20greet%20her%2C%20don't%20need%20him%2C%20her%20bed's%20made%20(made)%0AThis%20is%20a%20stick-up%2C%20stick-up%0AI%20need%20them%20bags%2C%20all%20that%20money%0AWe're%20gonna%20stick-up%2C%20stick-up%0AYou%20see%20the%20mask%2C%20where%20that%20money%3F%0AAll%20my%20ladies%20get%20it%20up%2C%20I%20see%20you%2C%20I%20do%20the%20same%0ATake%20it%20to%20another%20level%2C%20no%20passengers%20on%20my%20plane%0AI'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%20(hey)%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AThis%20is%20a%20stick-up%2C%20stick-up%0AI%20need%20them%20bags%2C%20all%20that%20money%0AStick-up%2C%20stick-up%0AYou%20see%20the%20mask%2C%20where%20that%20money%3F%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0ANa-na-na%2C%20diva%20is%20a%20female%20version%20of%20a%20hustla%20(oh-oh)%0AOf%20a%20hustla%2C%20of%20a%2C%20of%20a%20hustla%20(oh-oh)%0AI'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0AI'm%20a%2C%20I'm%20a%2C%20a%20diva%2C%20I'm%20a%2C%20I'm%20a%2C%20a%20diva%0A(Hey)" class="lyrics-link">Lihat Lirik</a>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Centuries">Centuries</h3>
+                    <p data-song-artist="Fall Out Boy">Fall Out Boy</p>
+                </div>
+                <!-- Grup lirik -->
+                <div class="lyrics-controls">
+                    <!-- Tombol "Lihat Lirik" yang mengarah ke lirik.html -->
+                     <a href="lirik.html?lyrics=Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Some%20legends%20are%20told%2C%20some%20turn%20to%20dust%20or%20to%20gold%20But%20you%20will%20remember%20me%20Remember%20me%20for%20centuries%20And%20just%20one%20mistake%20is%20all%20it%20will%20take%20We'll%20go%20down%20in%20history%20Remember%20me%20for%20centuries%20Hey-ya%2C%20ah-hey%20Hey-ya%2C%20remember%20me%20for%20centuries%20Mummified%20my%20teenage%20dreams%20No%2C%20it's%20nothing%20wrong%20with%20me%20The%20kids%20are%20all%20wrong%2C%20the%20story's%20all%20off%20Heavy%20metal%20broke%20my%20(heart)%20Come%20on%2C%20come%20on%2C%20and%20let%20me%20in%20Bruises%20on%20your%20thighs%20like%20my%20fingerprints%20And%20this%20is%20for%20to%20match%2C%20the%20darkness%20that%20you%20felt%20I%20never%20meant%20for%20you%20to%20fix%20yourself%20Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Some%20legends%20are%20told%2C%20some%20turn%20to%20dust%20or%20to%20gold%20But%20you%20will%20remember%20me%20Remember%20me%20for%20centuries%20And%20just%20one%20mistake%20is%20all%20it%20will%20take%20We'll%20go%20down%20in%20history%20Remember%20me%20for%20centuries%20Hey-ya%2C%20ah-hey%20Hey-ya%2C%20remember%20me%20for%20centuries%20And%20I%20can't%20stop%20'til%20the%20whole%20world%20knows%20my%20name%20'Cause%20I%20was%20only%20born%20inside%20my%20dreams%20Until%20you%20die%20for%20me%2C%20as%20long%20as%20there's%20a%20light%20My%20shadow's%20over%20you%20'cause%20I-I%20am%20The%20opposite%20of%20amnesia%2C%20you're%20And%20you're%20a%20cherry%20blossom%2C%20you're%20about%20to%20bloom%20You%20look%20so%20pretty%2C%20but%20you're%20gone%20so%20soon%20Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Some%20legends%20are%20told%2C%20some%20turn%20to%20dust%20or%20to%20gold%20But%20you%20will%20remember%20me%20Remember%20me%20for%20centuries%20And%20just%20one%20mistake%20is%20all%20it%20will%20take%20We'll%20go%20down%20in%20history%20Remember%20me%20for%20centuries%20Hey-ya%2C%20ah-hey%20Hey-ya%2C%20remember%20me%20for%20centuries%20We've%20been%20here%20forever%20(forever)%20And%20here's%20(and%20here's)%20the%20frozen%20proof%20(the%20frozen%20proof)%20I%20could%20scream%20forever%20(scream%20forever)%20We%20are%20the%20poisoned%20youth%20(poisoned%20youth)%20Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Doo-doo-doo-doo-doo-doo-doo%20Some%20legends%20are%20told%2C%20some%20turn%20to%20dust%20or%20to%20gold%20But%20you%20will%20remember%20me%20Remember%20me%20for%20centuries%20And%20just%20one%20mistake%20is%20all%20it%20will%20take%20We'll%20go%20down%20in%20history%20Remember%20me%20for%20centuries%20Hey-ya%2C%20a-hey%20(we'll%20go%20down%20in%20history)%20Hey-ya%2C%20remember%20me%20for%20centuries">Lihat Lirik</a>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Separuh Nafas">Separuh Nafas</h3>
+                    <p data-song-artist="Dewa-19">Dewa-19</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Elang">Elang</h3>
+                    <p data-song-artist="Dewa-19">Dewa-19</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Seberapa Pantas">Seberapa Pantas</h3>
+                    <p data-song-artist="Sheila on 7">Sheila on 7</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Kita">Kita</h3>
+                    <p data-song-artist="Sheila on 7">Sheila on 7</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Dynasty">Dynasty</h3>
+                    <p data-song-artist="MIIA">MIIA</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Kamnh">Kamnh</h3>
+                    <p data-song-artist="Emin&Joni">Emin&Joni</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Cinnamon Girl">Cinnamon Girl</h3>
+                    <p data-song-artist="Lana del Rey">Lana del Rey</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+            <div class="playlist-item">
+                <div class="playlist-item-info">
+                    <h3 data-song-title="Sadrah">Sadrah</h3>
+                    <p data-song-artist="For Revenge">For Revenge</p>
+                </div>
+                <div class="lyrics-controls">
+                    <span class="lyrics-text-link"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bagian Promosi Saya (Dipindahkan ke bawah Playlist Saya) -->
+        <div class="promotion-container">
+            <h2>Promosi Saya</h2>
+            <p>
+                Tertarik dengan dunia kreasi digital, penulisan, atau fotografi? Saya siap membantu!
+                Jelajahi karya saya atau mari berkolaborasi dalam proyek menarik.
+            </p>
+            <a href="promosi-page.html" class="promo-button promo-button-promosi">Lihat Promosi</a>
+        </div>
+
+
+        <!-- Bagian untuk animasi teks berjalan -->
+        <div class="running-text-container bg-pink-50 border border-pink-200 text-pink-800 text-sm py-2 px-4 rounded-full mt-6">
+            <p class="running-text font-semibold">
+                Selamat datang di halaman profil saya! Semoga hari Anda menyenangkan!
+            </p>
+        </div>
+
+        <!-- Tautan Media Sosial (Instagram dan WhatsApp) -->
+        <div class="mt-6 flex flex-wrap justify-center items-center gap-4">
+            <!-- Tautan Instagram -->
+            <a href="https://www.instagram.com/elsa_anggrian?igsh=YjNxdWQzazllNWV0" target="_blank" class="social-link flex items-center space-x-2 text-pink-600 hover:text-pink-800 font-semibold">
+                <!-- SVG Icon Instagram -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>Kunjungi Instagram ell</span>
+            </a>
+
+            <!-- Tautan WhatsApp -->
+            <a href="https://wa.me/6281396957512" target="_blank" class="social-link flex items-center space-x-2 text-green-600 hover:text-green-800 font-semibold">
+                <!-- SVG Icon WhatsApp -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8.5z"></path>
+                </svg>
+                <span>Chat ell</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal Lirik (Tidak digunakan lagi, tapi tetap di sini untuk referensi jika perlu) -->
+    <div id="lyricsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-button" id="closeModalButton">&times;</button>
+            <h3 class="modal-lyrics-title" id="modalLyricsTitle"></h3>
+            <p class="modal-lyrics-text" id="modalLyricsText"></p>
+            <p class="text-sm text-gray-500 mt-4">Catatan: Lirik ini adalah contoh. Anda dapat mengeditnya di kode HTML!</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logika JavaScript untuk modal lirik tidak diperlukan lagi karena lirik akan dibuka di halaman terpisah (lirik.html)
+            // Jadi, kode JavaScript yang terkait dengan pembukaan modal di halaman ini telah dihapus.
+        });
+    </script>
+</body>
+</html>

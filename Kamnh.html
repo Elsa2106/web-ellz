@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lirik Lagu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #fef2f2; /* Warna latar belakang pink muda */
+            color: #4a5568; /* Warna teks abu-abu gelap */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .lyrics-container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        .lyrics-title {
+            font-family: 'Charmonman', cursive;
+            font-weight: bold;
+            color: #db2777; /* Pink gelap */
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .lyrics-artist {
+            font-size: 1.2rem;
+            color: #a78bfa; /* Ungu sedang */
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        .lyrics-text {
+            white-space: pre-wrap; /* Mempertahankan spasi dan baris baru */
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-height: 400px; /* Batasi tinggi lirik */
+            overflow-y: auto; /* Gulir jika lirik panjang */
+            padding: 0 1rem;
+        }
+        .lyrics-text::-webkit-scrollbar {
+            width: 8px; /* Lebar scrollbar */
+        }
+        .lyrics-text::-webkit-scrollbar-track {
+            background: #fce7f3; /* Warna track scrollbar pink terang */
+            border-radius: 10px;
+        }
+        .lyrics-text::-webkit-scrollbar-thumb {
+            background: #f06292; /* Warna thumb scrollbar pink */
+            border-radius: 10px;
+        }
+        .lyrics-text::-webkit-scrollbar-thumb:hover {
+            background: #db2777; /* Warna thumb scrollbar pink lebih gelap saat hover */
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #f06292; /* Pink terang */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+        }
+        .back-button:hover {
+            background-color: #db2777; /* Pink lebih gelap */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="lyrics-container">
+        <h1 class="lyrics-title" id="songTitle">Judul Lagu</h1>
+        <p class="lyrics-artist" id="songArtist">Nama Artis</p>
+
+        <div class="mb-6">
+            <audio controls class="w-full max-w-xs mx-auto block rounded-lg shadow-sm">
+                <source src="https://files.cloudkuimages.guru/audios/qoLaHjFn.mp3" type="audio/mpeg">
+                Maaf, browser Anda tidak mendukung elemen audio.
+            </audio>
+        </div>
+
+        <div class="lyrics-text" id="lyricsContent">
+            <p>Ini adalah tempat di mana lirik lagu akan ditampilkan.</p>
+            <p>Anda bisa mengganti teks ini dengan lirik asli lagu favorit Anda.</p>
+            <p>Setiap baris lirik bisa Anda tulis di sini.</p>
+            <p>Selamat menikmati musik dan liriknya!</p>
+        </div>
+        <a href="halaman.html" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left mr-2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Kembali ke Profil
+        </a>
+    </div>
+
+    <script>
+        // JavaScript untuk memuat lirik secara dinamis dari URL atau data lain
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            // Default judul lagu adalah "Kamnh" jika tidak ada di URL
+            const title = urlParams.get('title') || 'Kamnh'; 
+            // Default nama artis adalah "Emin&Joni" jika tidak ada di URL
+            const artist = urlParams.get('artist') || 'Emin&Joni'; 
+            const lyrics = urlParams.get('lyrics') || 
+                encodeURIComponent(`В камине в шесть утра фотография твoя
+Горят воспоминания о тебе
+У камина в шесть утра разбитая душа
+И все твои обещания — пустота
+В камине в шесть утра фотография твоя
+Горят воспоминания о тебе
+У камина в шесть утра разбитая душа
+И все твои обещания — пустота
+В камине в шесть утра
+Твой маяк подарил мне боль
+Устал я жить, все обиды тая
+Уходи, за собой закрой
+Сколько бы я ни просил
+Ну ты же знала, что меня теряла
+Я босиком по стёклам бегал так упрямо
+Если бы не твой милый голосок
+Я бы упал, сделав последний вздох
+И звёзды мирно падали как будто для меня
+Я каждый раз загадывал тебя не потерять
+Но больше не могу, я просто мучаю себя
+Теперь ты больше не моя
+В камине в шесть утра фотография твоя
+Горят воспоминания о тебе
+У камина в шесть утра разбитaя душа
+И все твои обещания — пустота
+В камине в шесть утра фотография твоя
+Горят воспоминания о тебе
+У камина в шесть утра разбитая душа
+И все твои обещания — пустота (пустота)
+Пустота
+Пустота
+Пустотa`);
+
+            document.getElementById('songTitle').textContent = title;
+            document.getElementById('songArtist').textContent = artist;
+            // Menggunakan decodeURIComponent untuk memastikan karakter khusus ditampilkan dengan benar
+            document.getElementById('lyricsContent').innerHTML = decodeURIComponent(lyrics); 
+        });
+    </script>
+</body>
+</html>

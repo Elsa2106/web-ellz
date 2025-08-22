@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lirik Lagu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #fef2f2; /* Warna latar belakang pink muda */
+            color: #4a5568; /* Warna teks abu-abu gelap */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .lyrics-container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        .lyrics-title {
+            font-family: 'Charmonman', cursive;
+            font-weight: bold;
+            color: #db2777; /* Pink gelap */
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .lyrics-artist {
+            font-size: 1.2rem;
+            color: #a78bfa; /* Ungu sedang */
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        .lyrics-text {
+            white-space: pre-wrap; /* Mempertahankan spasi dan baris baru */
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-height: 400px; /* Batasi tinggi lirik */
+            overflow-y: auto; /* Gulir jika lirik panjang */
+            padding: 0 1rem;
+        }
+        .lyrics-text::-webkit-scrollbar {
+            width: 8px; /* Lebar scrollbar */
+        }
+        .lyrics-text::-webkit-scrollbar-track {
+            background: #fce7f3; /* Warna track scrollbar pink terang */
+            border-radius: 10px;
+        }
+        .lyrics-text::-webkit-scrollbar-thumb {
+            background: #f06292; /* Warna thumb scrollbar pink */
+            border-radius: 10px;
+        }
+        .lyrics-text::-webkit-scrollbar-thumb:hover {
+            background: #db2777; /* Warna thumb scrollbar pink lebih gelap saat hover */
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #f06292; /* Pink terang */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+        }
+        .back-button:hover {
+            background-color: #db2777; /* Pink lebih gelap */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="lyrics-container">
+        <h1 class="lyrics-title" id="songTitle">Judul Lagu</h1>
+        <p class="lyrics-artist" id="songArtist">Nama Artis</p>
+
+        <div class="mb-6">
+            <audio controls class="w-full max-w-xs mx-auto block rounded-lg shadow-sm">
+                <source src="https://files.catbox.moe/gwj9rm.mp3" type="audio/mpeg">
+                Maaf, browser Anda tidak mendukung elemen audio.
+            </audio>
+        </div>
+
+        <div class="lyrics-text" id="lyricsContent">
+            <p>Ini adalah tempat di mana lirik lagu akan ditampilkan.</p>
+            <p>Anda bisa mengganti teks ini dengan lirik asli lagu favorit Anda.</p>
+            <p>Setiap baris lirik bisa Anda tulis di sini.</p>
+            <p>Selamat menikmati musik dan liriknya!</p>
+        </div>
+        <a href="halaman.html" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left mr-2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Kembali ke Profil
+        </a>
+    </div>
+
+    <script>
+        // JavaScript untuk memuat lirik secara dinamis dari URL atau data lain
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            // Default judul lagu adalah "Diva" jika tidak ada di URL
+            const title = urlParams.get('title') || 'Diva'; 
+            // Default nama artis adalah "Beyoncé" jika tidak ada di URL
+            const artist = urlParams.get('artist') || 'Beyoncé'; 
+            const lyrics = urlParams.get('lyrics') || 
+                encodeURIComponent(`I'm a, a diva (hey), I'm a, I'm a, a diva (hey)
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a diva
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a diva
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a-
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh) (first)
+Stop the track, let me state facts
+I told you gimme a minute, and I'll be right back (first)
+50 million round the world, and they say that I couldn't get it
+I done got so sick and filthy with Benji's, I can't spend it (first)
+How you gon' be talking shit?
+You act like I just got up in it
+Been the number one diva in this game for a minute (first)
+I know you read the paper, the one that they call a queen
+Every radio 'round the world know me 'cause that's where I be (first)
+I'm a, a diva (hey), I'm a, I'm a, a diva (hey)
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a diva
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a diva
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a di-
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh) (first)
+When he pull up (up), wanna pop my hood up (up)
+Bet he better have a six-pack in the cooler (first)
+Getting money (money), divas gettin' money (money)
+If you ain't gettin' money, then you ain't got nothing for me (first)
+Tell me somethin' (tell me somethin')
+Where yo' boss at? (Where yo' boss at?)
+Where my ladies up in here that like to talk back? (That like to talk back)
+I wanna see ya (I can see her)
+I'd like to meet ya (I'd like to meet her)
+What you say? (Not to me)
+She ain't no diva (she ain't no diva) (first)
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+Since 15 in my stilettos, been strutting in this game (game)
+"What's your age?" was the question they asked when I hit the stage (stage)
+I'm a diva, best believe-a, you see her, she gettin' paid (paid)
+She ain't calling him to greet her, don't need him, her bed's made (made)
+This is a stick-up, stick-up
+I need them bags, all that money
+We're gonna stick-up, stick-up
+You see the mask, where that money?
+All my ladies get it up, I see you, I do the same
+Take it to another level, no passengers on my plane
+I'm a, a diva (hey), I'm a, I'm a, a diva (hey)
+I'm a, I'm a, a diva (hey), I'm a, I'm a, a diva
+This is a stick-up, stick-up
+I need them bags, all that money
+Stick-up, stick-up
+You see the mask, where that money?
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+Na-na-na, diva is a female version of a hustla (oh-oh)
+Of a hustla, of a, of a hustla (oh-oh)
+I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+I'm a, I'm a, a diva, I'm a, I'm a, a diva
+(Hey)`);
+
+            document.getElementById('songTitle').textContent = title;
+            document.getElementById('songArtist').textContent = artist;
+            // Menggunakan decodeURIComponent untuk memastikan karakter khusus ditampilkan dengan benar
+            document.getElementById('lyricsContent').innerHTML = decodeURIComponent(lyrics); 
+        });
+    </script>
+</body>
+</html>

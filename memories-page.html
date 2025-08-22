@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories Elsa</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Charmonman and Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%; /* Memastikan html dan body mengambil tinggi penuh viewport */
+            width: 100%; /* Memastikan html dan body mengambil lebar penuh viewport */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Mencegah overflow horizontal */
+        }
+        body {
+            font-family: 'Playfair Display', serif; /* Mengatur font Playfair Display sebagai default */
+            background-color: #fce7f3; /* Pink sangat muda sebagai latar belakang default */
+            display: flex; /* Menggunakan flexbox untuk layout halaman penuh */
+            justify-content: center; /* Memusatkan konten secara horizontal */
+            align-items: flex-start; /* Memusatkan konten secara vertikal di awal */
+            padding: 2rem; /* Padding agar konten tidak terlalu menempel ke tepi */
+            box-sizing: border-box; /* Memastikan padding tidak menambah ukuran total */
+            color: #4b5563; /* Warna teks abu-abu gelap */
+        }
+
+        .font-charmonman {
+            font-family: 'Charmonman', cursive;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #f06292; /* Pink terang */
+            color: white;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem; /* Tambahkan margin-top agar ada jarak dari konten di atasnya */
+        }
+        .back-button:hover {
+            background-color: #db2777; /* Pink lebih gelap */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsif, min 150px */
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #fff0f5; /* Latar belakang pink yang lebih terang */
+            border: 1px solid #fce7f3; /* Border ringan pink */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .clickable-image {
+            position: relative; /* Penting untuk penempatan pesan overlay */
+            display: block; /* Agar link mengambil seluruh ruang grid item */
+            height: 150px; /* Cocokkan tinggi gambar */
+            border-radius: 0.5rem;
+            overflow: hidden; /* Memastikan pesan overlay tidak keluar dari batas */
+            cursor: pointer; /* Menunjukkan bahwa gambar dapat diklik */
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: 100%; /* Memastikan gambar mengisi <a> tag */
+            object-fit: cover; /* Memastikan gambar mengisi area tanpa terdistorsi */
+            border-radius: 0.5rem;
+            /* Hiasan bingkai: box-shadow untuk efek glowing dan border */
+            border: 2px solid #ffccdd; /* Border pink muda */
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.6), /* Cahaya pink muda */
+                                 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan standar */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.9), /* Cahaya pink yang lebih terang saat hover */
+                                 0 4px 10px rgba(0, 0, 0, 0.15); /* Bayangan lebih kuat saat hover */
+            border-color: #ff69b4; /* Border pink lebih gelap saat hover */
+        }
+
+        /* Gaya untuk pemutar audio */
+        .audio-player-container {
+            margin-top: 2rem;
+            margin-bottom: 2.5rem; /* Jarak bawah yang lebih besar */
+            background-color: #fce7f3; /* Latar belakang pink muda */
+            padding: 1rem 1.5rem;
+            border-radius: 9999px; /* Bentuk pil */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Bayangan dalam */
+        }
+        audio {
+            width: 100%;
+            max-width: 400px; /* Batasi lebar pemutar audio */
+            height: 40px; /* Tinggi standar untuk pemutar audio */
+            background-color: transparent; /* Sesuaikan dengan kontainer */
+            border-radius: 9999px; /* Konsisten dengan bentuk pil */
+        }
+        /* Mengubah warna kontrol audio */
+        audio::-webkit-media-controls-panel {
+            background-color: #ef476f; /* Pink vibrant untuk panel kontrol */
+            border-radius: 9999px;
+            color: white; /* Warna ikon dan teks kontrol */
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-volume-slider,
+        audio::-webkit-media-controls-timeline {
+            color: white; /* Memastikan ikon terlihat */
+        }
+
+        /* Gaya untuk pesan overlay di atas gambar */
+        .image-overlay-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* Latar belakang semi-transparan putih */
+            color: #db2777; /* Warna teks pink gelap */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0; /* Awalnya tidak terlihat */
+            visibility: hidden; /* Sembunyikan sepenuhnya dari interaksi */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            box-sizing: border-box; /* Memastikan padding tidak menambah ukuran */
+        }
+        .image-overlay-message.show {
+            opacity: 1; /* Tampilkan */
+            visibility: visible; /* Buat terlihat */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-pink-100 to-rose-100">
+
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full text-center max-w-full">
+        <!-- Judul Halaman -->
+        <h1 class="text-4xl font-bold font-charmonman text-pink-700 mb-6">
+            Galeri Memories ✨
+        </h1>
+        
+        <p class="text-gray-800 font-playfair leading-relaxed text-lg mb-4">
+            Nikmati beberapa kenangan dari foto-foto saya. Klik foto untuk melihat pesannya!
+        </p>
+
+        <!-- Kotak Pesan yang akan muncul (Dihapus karena pesan akan muncul di masing-masing gambar) -->
+        <!-- <div class="message-box" id="imageMessageBox"></div> -->
+
+        <!-- Pemutar Audio -->
+        <div class="audio-player-container">
+            <p class="font-semibold text-gray-700 mr-2">Lagu untuk Teman:</p>
+            <audio controls loop>
+                <!-- Anda bisa mengganti URL audio ini dengan lagu pilihan Anda -->
+                <source src="https://files.catbox.moe/pgiar6.mp3" type="audio/mpeg">
+                Maaf, browser Anda tidak mendukung elemen audio.
+            </audio>
+        </div>
+
+        <div class="image-grid">
+            <!-- Foto-foto Kenangan (Setiap foto sekarang dapat diklik) -->
+            <a href="#" class="clickable-image" data-message="Photo with Alumni!" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/39/83/9f/39839fd9629bfeafcf5f96ab9fae3e02.jpg" alt="Memori 1">
+            </a>
+            <a href="#" class="clickable-image" data-message="Breaking the  fast with friends" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/a1/b5/20/a1b5201ba8d89ebbacd5df8c6c1c2992.jpg" alt="Memori 2">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with scouts!" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/82/4a/90/824a908734bb04bc7e5c9bf04843ccc1.jpg" alt="Memori 3">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with friends" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/3c/6e/b3/3c6eb3bc8c79ce918bf496ae5aabbd03.jpg" alt="Memori 4">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with  Gen 11" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/8c/5f/3a/8c5f3a57a219181401d0023d2ef317aa.jpg" alt="Memori 5">
+            </a>
+            <a href="#" class="clickable-image" data-message="When we first became Bantara" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/f9/95/21/f99521e94e28408735296fea5dcf9ebd.jpg" alt="Memori 6">
+            </a>
+            <a href="#" class="clickable-image" data-message="Moments when making drama at graduation!" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/1e/6a/a9/1e6aa9f9a1f0b0f64cb9cdc9cb8acdba.jpg" alt="Memori 7">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with Bantara" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/8c/e9/23/8ce92395c84d441fd5e3fda06fa6f47f.jpg" alt="Memori 8">
+            </a>
+            <a href="#" class="clickable-image" data-message="When we first got the Bantara certificate!" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/15/56/c2/1556c271a0c0a354e6cb669787427283.jpg" alt="Memori 9">
+            </a>
+            <a href="#" class="clickable-image" data-message="Playing UNO with scouts" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/cf/55/7c/cf557c9bdb6d89497aa748378513fc19.jpg" alt="Memori 10">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with school friends" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/20/69/3f/20693f656d007efe1fbeddabc1961da8.jpg" alt="Memori 11">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo Bantara" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/66/29/0c/66290cfb6a22ca6a0706c391ae704a95.jpg" alt="Memori 12">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo pagelaran" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/66/11/f4/6611f436e22414c45dcd23887bea1748.jpg" alt="Memori 13">
+            </a>
+            <a href="#" class="clickable-image" data-message="graduation drama preparation photos" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/87/61/c5/8761c5156555aa528b502750576ed0f5.jpg" alt="Memori 14">
+            </a>
+            <a href="#" class="clickable-image" data-message="photo with friends" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/4c/65/c7/4c65c75dfe90902729e88a471e28bc2b.jpg" alt="Memori 15">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photo with classmates" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/58/6e/50/586e50a49370bfe33fa7ba0674c6547a.jpg" alt="Memori 16">
+            </a>
+            <a href="#" class="clickable-image" data-message="fotbar di gacoan" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/e2/b5/46/e2b546f04358f126db22cb229c4f5d46.jpg" alt="Memori 17">
+            </a>
+            <a href="#" class="clickable-image" data-message="Fotbar lagi" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/27/a3/b7/27a3b7006c87218708b73e47f751b4f1.jpg" alt="Memori 18">
+            </a>
+            <a href="#" class="clickable-image" data-message="I really miss this momen" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/00/19/69/001969f661fa5cc6b09d09fdd75a4468.jpg" alt="Memori 19">
+            </a>
+            <a href="#" class="clickable-image" data-message="Momen kebersamaan." onclick="return false;">
+                <img src="https://i.pinimg.com/736x/f7/ab/df/f7abdf2b33f4fdc0431035b0d4609501.jpg" alt="Memori 20">
+            </a>
+            <a href="#" class="clickable-image" data-message="Foto pengukuhan." onclick="return false;">
+                <img src="https://i.pinimg.com/736x/9f/49/d1/9f49d1d3329daa34d2b6d71e8307c273.jpg" alt="Memori 21">
+            </a>
+            <a href="#" class="clickable-image" data-message="foto keluarga" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/79/00/75/790075ea16984dc90cb2297aed8bc2fc.jpg" alt="Memori 22">
+            </a>
+            <a href="#" class="clickable-image" data-message="Foto mak&bapak" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/c8/22/26/c822267435c76816944b6efa020748f1.jpg" alt="Memori 23">
+            </a>
+            <a href="#" class="clickable-image" data-message="my little Sister's brithday photo" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/1c/a5/ff/1ca5ff4948caca90f57b75633f61b535.jpg" alt="Memori 24">
+            </a>
+            <a href="#" class="clickable-image" data-message="Photos of when we were  little" onclick="return false;">
+                <img src="https://i.pinimg.com/736x/2e/24/b1/2e24b1fcacda120426fd5a62149f327b.jpg" alt="Memori 25">
+            </a>
+        </div>
+
+        <p class="text-gray-600 font-playfair mt-8">
+            Semoga Anda menikmati melihat kenangan-kenangan ini!
+        </p>
+        <p class="text-gray-600 font-playfair mt-4 text-center">
+            Love u all
+        </p>
+
+        <!-- Tombol Kembali ke Profil (Dipindahkan ke Paling Bawah) -->
+        <a href="halaman.html" class="back-button">
+            <!-- SVG Icon Arrow Left -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left mr-2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Kembali ke Profil
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const clickableImages = document.querySelectorAll('.clickable-image');
+            
+            clickableImages.forEach(imageLink => {
+                imageLink.addEventListener('click', (event) => {
+                    event.preventDefault(); // Mencegah navigasi ke URL kosong dari <a> tag
+
+                    // Sembunyikan pesan overlay yang mungkin masih terlihat dari gambar lain
+                    document.querySelectorAll('.image-overlay-message.show').forEach(msg => {
+                        msg.classList.remove('show');
+                        // Hapus elemen setelah transisi selesai
+                        setTimeout(() => {
+                            if (msg.parentNode) {
+                                msg.parentNode.removeChild(msg);
+                            }
+                        }, 300); // Sesuaikan dengan durasi transisi opacity
+                    });
+
+                    const message = imageLink.dataset.message;
+                    
+                    // Buat elemen div baru untuk pesan overlay
+                    const overlayMessage = document.createElement('div');
+                    overlayMessage.classList.add('image-overlay-message');
+                    overlayMessage.textContent = message;
+                    
+                    // Tambahkan elemen pesan ke dalam link gambar
+                    imageLink.appendChild(overlayMessage);
+
+                    // Pastikan elemen sudah dirender sebelum menambahkan kelas 'show' untuk memicu transisi
+                    requestAnimationFrame(() => {
+                        overlayMessage.classList.add('show');
+                    });
+
+                    // Sembunyikan pesan setelah beberapa detik
+                    setTimeout(() => {
+                        overlayMessage.classList.remove('show');
+                        // Hapus elemen dari DOM setelah transisi fade-out selesai
+                        setTimeout(() => {
+                            if (overlayMessage.parentNode) {
+                                overlayMessage.parentNode.removeChild(overlayMessage);
+                            }
+                        }, 300); // Sesuaikan dengan durasi transisi opacity
+                    }, 0900); // Pesan akan mulai menghilang setelah 2.5 detik
+                });
+            });
+        });
+    </script>
+</body>
+</html>
